@@ -4,7 +4,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -51,7 +53,11 @@ public class RobotContainer {
     // Set the options to show up in the Dashboard for selecting auto modes. If you
     // add additional auto modes you can add additional lines here with
     // autoChooser.addOption
-    autoChooser.setDefaultOption("Autonomous", new AutoCommand(driveSubsystem));
+    autoChooser.setDefaultOption("Do Nothing", new AutoCommand(driveSubsystem));
+    autoChooser.setDefaultOption("Drive Straight", new AutoCommand(driveSubsystem));
+    autoChooser.setDefaultOption("DriveAndScore", new AutoCommand(driveSubsystem));
+
+    SmartDashboard.putData("AutoMode", autoChooser);
   }
 
   /**
@@ -83,9 +89,9 @@ public class RobotContainer {
     // value). Similarly for the X axis where we need to flip the value so the
     // joystick matches the WPILib convention of counter-clockwise positive
     driveSubsystem.setDefaultCommand(new DriveCommand(
-        () -> -driverController.getLeftY() *
+        () -> (-driverController.getRightTriggerAxis() + driverController.getRightTriggerAxis()) *
             (driverController.getHID().getRightBumperButton() ? 1 : 0.5),
-        () -> -driverController.getRightX(),
+        () -> -driverController.getLeftX(),
         driveSubsystem));
 
     // Set the default command for the roller subsystem to an instance of
